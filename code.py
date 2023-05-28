@@ -42,6 +42,7 @@ display.print(".")
 time.sleep(1)
 display.print(".")
 time.sleep(1)
+display.clear()
 
 # ---------------------------------------------------------------
 # Buttons declarations
@@ -61,30 +62,26 @@ btn4.switch_to_input(pull=digitalio.Pull.DOWN)
 # Keycode class defines USB HID keycodes to send using Keyboard.  
 def btn1Action():
     cc.send(ConsumerControlCode.PLAY_PAUSE)
-    display.clear()
     getVolume()
     display.set_cursor_pos(1,0)
-    display.print("Play/Pause")
+    display.print("Play/Pause  ")
     time.sleep(0.5)
     
 def btn2Action():
     cc.send(ConsumerControlCode.SCAN_NEXT_TRACK)
-    display.clear()
-    getVolume()
     display.set_cursor_pos(1,0)
-    display.print("Next")
+    display.print("Next        ")
     time.sleep(0.5)
+    getVolume()
     
 def btn3Action():
-    display.clear()
     getVolume()
     display.set_cursor_pos(1,0)
-    display.print("Open Brave")
+    display.print("Open Brave  ")
     keyboard.send(Keycode.GUI, Keycode.TWO)
     time.sleep(0.4)
     
 def btn4Action():
-    display.clear()
     getVolume()
     display.set_cursor_pos(1,0)
     display.print("Open Discord")
@@ -123,9 +120,9 @@ display.create_char(1,discord1_char)
 discord2_char = (0x00,0x06,0x0F,0x1F,0x1D,0x1F,0x1F,0x0C)
 display.create_char(2,discord2_char)
 
-brave1_char = (0x03,0x04,0x0B,0x09,0x09,0x04,0x04,0x03)
+brave1_char = (0x01,0x06,0x05,0x04,0x06,0x02,0x03,0x01)
 display.create_char(3,brave1_char)
-brave2_char = (0x10,0x08,0x14,0x04,0x04,0x08,0x08,0x10)
+brave2_char = (0x18,0x06,0x0A,0x02,0x16,0x04,0x0C,0x18)
 display.create_char(4,brave2_char)
 
 play_char = (0x10,0x18,0x1C,0x1E,0x1E,0x1C,0x18,0x10)
@@ -163,16 +160,15 @@ def nextTrack():
     
 
 def getVolume():
-    display.clear()
     display.set_cursor_pos(1,13)
     display.write(0)
     display.print(str(current_volume))
     display.home()
-    DiscordLogo()
-    BraveLogo()
-    playPause()
-    nextTrack()
-    
+
+DiscordLogo()
+BraveLogo()
+playPause()
+nextTrack()
 # ---------------------------------------------------------------
 # Loop
 while True:
