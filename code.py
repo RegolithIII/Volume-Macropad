@@ -45,7 +45,7 @@ time.sleep(1)
 display.clear()
 
 # ---------------------------------------------------------------
-# Buttons declarations
+# Button's declarations
 btn1 = digitalio.DigitalInOut(board.GP15)
 btn1.switch_to_input(pull=digitalio.Pull.DOWN)
 
@@ -58,7 +58,7 @@ btn3.switch_to_input(pull=digitalio.Pull.DOWN)
 btn4 = digitalio.DigitalInOut(board.GP12)
 btn4.switch_to_input(pull=digitalio.Pull.DOWN)
 
-# What buttons do :
+# What buttons do
 # Keycode class defines USB HID keycodes to send using Keyboard.  
 def btn1Action():
     cc.send(ConsumerControlCode.PLAY_PAUSE)
@@ -162,19 +162,20 @@ def nextTrack():
 def getVolume():
     display.set_cursor_pos(1,13)
     display.write(0)
-    display.print(str(current_volume))
+    display.print(str(current_volume)[:2])
     display.home()
 
 DiscordLogo()
 BraveLogo()
 playPause()
 nextTrack()
+
 # ---------------------------------------------------------------
 # Loop
 while True:
     time.sleep(0.1)
     
-#Volume Control
+# Volume Control
     if time.monotonic() - last_read > READ_TIME:
         position = int(map_function(potentiometer.value, 200, 65520, 0, 100))
 
