@@ -35,14 +35,6 @@ display.set_display_enabled(True)
 
 # Starting animation here, purely aesthetics
 display.clear()
-display.set_cursor_pos(0,0)
-display.print("Starting.")
-time.sleep(1)
-display.print(".")
-time.sleep(1)
-display.print(".")
-time.sleep(1)
-display.clear()
 
 # ---------------------------------------------------------------
 # Button's declarations
@@ -59,7 +51,8 @@ btn4 = digitalio.DigitalInOut(board.GP12)
 btn4.switch_to_input(pull=digitalio.Pull.DOWN)
 
 # What buttons do
-# Keycode class defines USB HID keycodes to send using Keyboard.  
+# Keycode class defines USB HID keycodes to send using Keyboard.
+# Consumer control Documentation : https://docs.circuitpython.org/projects/hid/en/latest/api.html#adafruit_hid.keycode.Keycode
 def btn1Action():
     cc.send(ConsumerControlCode.PLAY_PAUSE)
     getVolume()
@@ -68,9 +61,9 @@ def btn1Action():
     time.sleep(0.5)
     
 def btn2Action():
-    cc.send(ConsumerControlCode.SCAN_NEXT_TRACK)
+    keyboard.send(Keycode.CONTROL, Keycode.ALT, Keycode.F11)
     display.set_cursor_pos(1,0)
-    display.print("Next        ")
+    display.print("Switch audio")
     time.sleep(0.5)
     getVolume()
     
@@ -110,38 +103,47 @@ current_volume = 0
 last_position = 0
 
 # ---------------------------------------------------------------
-# Custom characters
+# Custom characters (max8)
 # Creator : https://educ8s.tv/tools/lcd-character-creator/
 volume_char = (0x02,0x09,0x05,0x15,0x15,0x05,0x09,0x02)
 display.create_char(0,volume_char)
 
-discord1_char = (0x00,0x0C,0x1E,0x1F,0x17,0x1F,0x1F,0x06)
+discord1_char = (0x00,0x06,0x0F,0x1F,0x1D,0x1F,0x1F,0x0C)
 display.create_char(1,discord1_char)
-discord2_char = (0x00,0x06,0x0F,0x1F,0x1D,0x1F,0x1F,0x0C)
+discord2_char = (0x00,0x0C,0x1E,0x1F,0x17,0x1F,0x1F,0x06)
 display.create_char(2,discord2_char)
 
-brave1_char = (0x01,0x06,0x05,0x04,0x06,0x02,0x03,0x01)
-display.create_char(3,brave1_char)
-brave2_char = (0x18,0x06,0x0A,0x02,0x16,0x04,0x0C,0x18)
-display.create_char(4,brave2_char)
+#brave1_char = (0x01,0x06,0x05,0x04,0x06,0x02,0x03,0x01)
+#display.create_char(3,brave1_char)
+#brave2_char = (0x18,0x06,0x0A,0x02,0x16,0x04,0x0C,0x18)
+#display.create_char(4,brave2_char)
 
 play_char = (0x10,0x18,0x1C,0x1E,0x1E,0x1C,0x18,0x10)
 display.create_char(5,play_char)
 pause_char = (0x1B,0x1B,0x1B,0x1B,0x1B,0x1B,0x1B,0x1B)
 display.create_char(6,pause_char)
 
+speaker_char = (0x1F,0x11,0x15,0x11,0x15,0x1B,0x15,0x1F)
+display.create_char(7,speaker_char)
+
+# headset1_char = (0x03,0x04,0x08,0x08,0x0C,0x0C,0x0D,0x01)
+# display.create_char(3,headset1_char)
+headset2_char = (0x18,0x04,0x02,0x02,0x06,0x06,0x06,0x00)
+display.create_char(4,headset2_char)
+
 def DiscordLogo():
     display.set_cursor_pos(0,14)
-    display.write(2)
-    display.set_cursor_pos(0,15)
     display.write(1)
+    display.set_cursor_pos(0,15)
+    display.write(2)
     display.home()
 
 def BraveLogo():
     display.set_cursor_pos(0,10)
-    display.write(3)
+    #display.write(3)
+    display.print("<>")
     display.set_cursor_pos(0,11)
-    display.write(4)
+    #display.write(4)
     display.home()
     
 def playPause():
@@ -157,8 +159,15 @@ def nextTrack():
     display.set_cursor_pos(0,5)
     display.write(5)
     display.home()
-    
 
+def speaker():
+    display.set_cursor_pos(0,4)
+    display.write(7)
+    display.set_cursor_pos(0,5)
+    display.write(4)
+    display.home()
+    print("Speaker")
+    
 def getVolume():
     display.set_cursor_pos(1,13)
     display.write(0)
@@ -168,7 +177,7 @@ def getVolume():
 DiscordLogo()
 BraveLogo()
 playPause()
-nextTrack()
+speaker()
 
 # ---------------------------------------------------------------
 # Loop
@@ -212,7 +221,7 @@ while True:
 
     if btn2.value:
         btn2Action()
-
+       
     if btn3.value:
         btn3Action()
       
